@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>五子棋</title>
+    <style type="text/css">
+        body {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas width="640" id="canvas" height="640">
+請換瀏覽器
+</canvas>
+
+<div style="position: absolute; top:0px; right: 20px">
+	<button onClick="undo()">悔棋</button>
+	<button onClick="redo()">還原悔棋</button>	
+</div>
+
+ <script type="text/javascript">
+	
+	var canvas = document.getElementById("canvas");
+	var context = document.getElementById("canvas").getContext("2d");
+	var tmp = [];
+	var chessSize = 40;
+	var cellWidth = 640 / (15 - 1 + 2);
+	var boardWidth = 640;	
+	var boardSize = 15;	
+	var chessData;
+	var tmpCheseX;
+	var tmpCheseY;
+	var tmpPopChess;
+	var tmpColor;
+
+
+	function init(){
+		var Game = {
+			boardWidth: 640,
+			boardSize: 15,
+			isWhite: false,
+			isGameOver: false,	
+			chessSize: 40,		
+			whiteVal: -1, 	
+			blackVal: 1,	
+			numberContinous: 5, 	
+			initialize: function(){ 
+				this.canvas = document.getElementById("canvas");
+				this.context = canvas.getContext("2d");
+				
+				this.img_white = new Image();
+				this.img_black = new Image();
+				this.img_white.src = "./whitec.png";
+				this.img_black.src = "./blackc.png";
+				
+				var boardSize = this.boardSize;
+				this.cellWidth = 640 / (15 - 1 + 2);
+				
+				this.gap = this.cellWidth / 2;
+				
+				
+				chessData = new Array(boardSize);
+				for (var x = 0; x < boardSize; x++) {
+					chessData[x] = new Array(boardSize);
+					for (var y = 0; y < boardSize; y++) {
+						chessData[x][y] = 0;
+					}
+				}
+				
+				drawBoard();
+				this.drawChess();
+				this.run();
+				
+			},
+			drawChess: function(x, y) { 
+				if (this.isGameOver) {
+					alert("遊戲結束");
+					return;
+				}
+				var cellWidth = this.cellWidth;
+				var boardSize = this.boardSize;
+				var gap = this.gap;
+				
+				if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
+					var chessSize = this.chessSize;
+					if (!this.isWhite) {
+						this.context.drawImage(this.img_black, x * cellWidth + gap, y * cellWidth + gap, chessSize, chessSize);  
+						chessData[x][y] = this.blackVal;
+						tmpCheseX = x;
+						tmpCheseY = y;
+						tmpColor = 1;
+						tmp.push({img: this.img_black, x: x * cellWidth + gap, y:  y * cellWidth + gap})
+					}
+					else{
+						this.context.drawImage(this.img_white, x * cellWidth + gap, y * cellWidth + gap, chessSize, chessSize);   
+						chessData[x][y] = this.whiteVal;
+						tmpCheseX = x;
+						tmpCheseY = y;
+						tmpColor = -1;
+						tmp.push({img: this.img_white, x: x * cellWidth + gap, y:  y * cellWidth + gap})
+					}
+					this.check(x, y);
+				}
+			},
+			play: function(e) {	
+				var gap = this.gap;
+				var cellWidth = this.cellWidth;
+				
+				var x = parseInt((e.clientX - gap) / cellWidth);
+				var y = parseInt((e.clientY - gap) / cellWidth);
+	 
+				if (chessData[x][y] != 0) {
+					alert("無法在此下棋");
+					return;
+				}
+				this.drawChess(x, y);
+			},
+			check: function(x, y) {		
+				
+				var chess = this.isWhite ? this.whiteVal: this.blackVal;
+				var boardSize = this.boardSize;
+
+				function a(){
+					var count = 0;
+					for (var i = x; i >= 0; i--) {
+						if(isNonExist(i, y) || chessData[i][y] != chess){
+							break;
+						}
+						count++;
+					}
+					for (var i = x + 1; i < boardSize; i++) {
+						if(isNonExist(i, y) || chessData[i][y] != chess){
+							break;
+						}
+						count++;
+					}
+					return count;
+				}
+
+				function b(){
+					var count = 0;
+					for (var i = y; i >= 0; i--) {
+						if(isNonExist(x, i) || chessData[x][i] != chess){
+							break;
+						}
+						count++;
+					}
+					for (var i = y + 1; i < boardSize; i++) {
+						if(isNonExist(x, i) || chessData[x][i] != chess){
+							break;
+						}
+						count++;
+					}
+					return count;
+				}
+				
+				function c(){
+					var count = 0;		
+					for (var i = x, j = y; i >= 0, j >= 0; i--, j--) {
+						if (isNonExist(i, j) || chessData[i][j] != chess) {
+							break;
+						}
+						count++;
+					}
+					for (var i = x + 1, j = y + 1; i < boardSize, j < boardSize; i++, j++) {
+						if (isNonExist(i, j) || chessData[i][j] != chess) {
+							break;
+						}
+						count++;
+					}
+					return count;
+				}
+				
+				function d(){		
+					var count = 0;
+					for (var i = x, j = y; i >= 0, j < boardSize; i--, j++) {
+						if (isNonExist(i, j) || chessData[i][j] != chess) {
+							break;
+						}
+						count++;
+					}
+					for (var i = x + 1, j = y - 1; i < boardSize, j >= 0; i++, j--) {
+						if (isNonExist(i, j) || chessData[i][j] != chess) {
+							break;
+						}
+						count++;
+					}
+					return count;
+				}
+				
+				
+				function isNonExist(i, j){
+					if(i >= 0 && i < boardSize && j >= 0 && j < boardSize){
+						return false;
+					}
+					return true;
+				}
+				
+				var numberContinous = this.numberContinous;
+				
+				if (a() >= numberContinous || b() >= numberContinous || c() >= numberContinous || d() >= numberContinous) {
+					this.win();
+				}
+				this.isWhite = !this.isWhite;
+			},
+			win: function(){
+				if (!this.isWhite) {
+					alert("黑棋赢了");
+				}
+				else {
+					alert("白棋赢了");
+				}
+				this.isGameOver = true;
+			},
+			run: function(){ 
+				var self = this;
+				self.canvas.onmousedown = function(event){
+					self.play(event);
+				}
+			}
+		}
+		Game.initialize();
+	}
+function drawBoard(){// 棋盤線
+	for (var i = cellWidth; i < boardWidth; i += cellWidth) {
+		context.beginPath();
+		context.moveTo(cellWidth, i);
+		context.lineTo(boardWidth - cellWidth, i);
+		context.closePath();
+		context.stroke();
+
+		context.beginPath();
+		context.moveTo(i, cellWidth);
+		context.lineTo(i, boardWidth - cellWidth);
+		context.closePath();
+		context.stroke();
+	}
+}
+window.onload = function(){
+  init();
+}
+
+function undo (){
+  tmpPopChess = tmp[tmp.length - 1];	
+  tmp.pop();
+  chessData[tmpCheseX][tmpCheseY] = 0;
+  context.clearRect(10, 10, canvas.width, canvas.height);
+  drawBoard();
+  tmp.forEach(d => {context.drawImage(d.img, d.x, d.y, chessSize, chessSize)}); 
+}
+function redo (){
+  tmp.push(tmpPopChess);
+  chessData[tmpCheseX][tmpCheseY] = tmpColor;
+  context.clearRect(10, 10, canvas.width, canvas.height);
+  drawBoard();
+  tmp.forEach(d => {context.drawImage(d.img, d.x, d.y, chessSize, chessSize)}); 
+}
+
+
+</script>
+</body>
+</html>

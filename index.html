@@ -1,228 +1,324 @@
-<!DOCTYPE html>
+<!DOCTYPE>
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>五子棋</title>
-    <style type="text/css">
-        body {
-            margin: 10px;
-        }
+    <style>
+    table {
+        width:80%;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td{
+    width:20px;
+    height: 70px
+    
+    }
+
+    .whitec {
+        background: url(./whitec.png);
+        background-repeat: no-repeat;
+        text-align: center; 
+        background-size: 80px 70px;
+    }
+
+    .blackc {
+        background: url(./blackc.png);
+        background-repeat: no-repeat;
+        text-align: center; 
+        background-size: 80px 70px;
+    }
     </style>
 </head>
+
+
 <body>
-<canvas width="640" id="canvas" height="640">
-你的浏览器不支持canvas, 请用chrone
-</canvas>
- <script type="text/javascript">
-	// 整个程序的入口函数
-	function init(){
-		var Game = {
-			boardWidth: 640,	// 棋盘大小
-			boardSize: 15,	// 棋盘线数
-			isWhite: false,	// 是否为白棋, 黑棋先行
-			isGameOver: false,	// 是否已经胜利
-			imageDir: "images/", // 图片目录
-			chessSize: 40,		// 棋子大小
-			whiteVal: -1, 	// 白棋赋值为-1
-			blackVal: 1,	// 黑棋赋值为1
-			numberContinous: 5, 	// 5个相同的
-			initialize: function(){ // 初始化
-				this.canvas = document.getElementById("canvas");
-				this.context = canvas.getContext("2d");
-				
-				this.img_white = new Image();
-				this.img_black = new Image();
-				this.img_white.src = this.imageDir + "white.png";
-				this.img_black.src = this.imageDir + "black.png";
-				
-				var boardSize = this.boardSize;
-				this.cellWidth = this.boardWidth / (boardSize - 1 + 2);
-				
-				this.gap = this.cellWidth / 2;
-				
-				
-				var chessData = new Array(boardSize);//这个为棋盘的二维数组用来保存棋盘信息，初始化0为没有走过的，1为白棋走的，2为黑棋走的
-				for (var x = 0; x < boardSize; x++) {
-					chessData[x] = new Array(boardSize);
-					for (var y = 0; y < boardSize; y++) {
-						chessData[x][y] = 0;
-					}
-				}
-				this.chessData = chessData;
-				
-				this.drawBoard();
-				this.drawChess();
-				this.run();
-				
-			},
-			drawBoard: function(){// 绘制棋盘
-				var context = this.context;
-				var cellWidth = this.cellWidth;
-				var boardWidth = this.boardWidth;
-				
-				for (var i = cellWidth; i < boardWidth; i += cellWidth) {//绘制棋盘的线
-					context.beginPath();
-					context.moveTo(cellWidth, i);
-					context.lineTo(boardWidth - cellWidth, i);
-					context.closePath();
-					context.stroke();
-	 
-					context.beginPath();
-					context.moveTo(i, cellWidth);
-					context.lineTo(i, boardWidth - cellWidth);
-					context.closePath();
-					context.stroke();
-				}
-			},
-			drawChess: function(x, y) { // 绘制棋子，1为黑棋，-1为白棋
-				if (this.isGameOver) {
-					alert("已经结束了，如果需要重新玩，请刷新");
-					return;
-				}
-				var cellWidth = this.cellWidth;
-				var boardSize = this.boardSize;
-				var gap = this.gap;
-				
-				if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
-					var chessSize = this.chessSize;
-					if (!this.isWhite) {
-						this.context.drawImage(this.img_black, x * cellWidth + gap, y * cellWidth + gap, chessSize, chessSize);    //绘制黑棋
-						this.chessData[x][y] = this.blackVal;
-					}
-					else{
-						this.context.drawImage(this.img_white, x * cellWidth + gap, y * cellWidth + gap, chessSize, chessSize);    //绘制白棋
-						this.chessData[x][y] = this.whiteVal;
-					}
-					this.check(x, y);
-				}
-			},
-			play: function(e) {	// 下棋事件	
-				var gap = this.gap;
-				var cellWidth = this.cellWidth;
-				
-				var x = parseInt((e.clientX - gap) / cellWidth);
-				var y = parseInt((e.clientY - gap) / cellWidth);
-	 
-				if (this.chessData[x][y] != 0) {//判断该位置是否被下过了
-					alert("你不能在这个位置下棋");
-					return;
-				}
-				this.drawChess(x, y);
-			},
-			check: function(x, y) {//判断该局棋盘是否赢了			
-				var chessData = this.chessData;
-				var chess = this.isWhite ? this.whiteVal: this.blackVal;
-				var boardSize = this.boardSize;
 
-				// 整体逻辑是以最后落点的棋子位置为中心，以“米”字逻辑进行判断
-				
-				function a(){// 从左到右判断
-					var count = 0;
-					for (var i = x; i >= 0; i--) {
-						if(isNonExist(i, y) || chessData[i][y] != chess){
-							break;
-						}
-						count++;
-					}
-					for (var i = x + 1; i < boardSize; i++) {
-						if(isNonExist(i, y) || chessData[i][y] != chess){
-							break;
-						}
-						count++;
-					}
-					return count;
-				}
+<table>
+  <tr>
+   <td ></td>
+    <td></td>		
+    <td></td>
+     <td></td>
+     <td></td>		
+    <td></td>
+     <td></td>
+     <td></td>		
+    <td></td>
+     <td></td>
+  </tr>
+  <tr>
+     <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  <tr>
+   <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+  <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+    <tr>
+      <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+     <td></td>		
+    <td></td>
+       <td></td>
+  </tr>
+  
+</table>
 
-				function b(){// 从上到下判断
-					var count = 0;
-					for (var i = y; i >= 0; i--) {
-						if(isNonExist(x, i) || chessData[x][i] != chess){
-							break;
-						}
-						count++;
-					}
-					for (var i = y + 1; i < boardSize; i++) {
-						if(isNonExist(x, i) || chessData[x][i] != chess){
-							break;
-						}
-						count++;
-					}
-					return count;
-				}
-				
-				function c(){// 从左上到右下判断		
-					var count = 0;		
-					for (var i = x, j = y; i >= 0, j >= 0; i--, j--) {
-						if (isNonExist(i, j) || chessData[i][j] != chess) {
-							break;
-						}
-						count++;
-					}
-					for (var i = x + 1, j = y + 1; i < boardSize, j < boardSize; i++, j++) {
-						if (isNonExist(i, j) || chessData[i][j] != chess) {
-							break;
-						}
-						count++;
-					}
-					return count;
-				}
-				
-				function d(){// 从左下到右上判断			
-					var count = 0;
-					for (var i = x, j = y; i >= 0, j < boardSize; i--, j++) {
-						if (isNonExist(i, j) || chessData[i][j] != chess) {
-							break;
-						}
-						count++;
-					}
-					for (var i = x + 1, j = y - 1; i < boardSize, j >= 0; i++, j--) {
-						if (isNonExist(i, j) || chessData[i][j] != chess) {
-							break;
-						}
-						count++;
-					}
-					return count;
-				}
-				
-				// 当前值是否存在
-				function isNonExist(i, j){
-					if(i >= 0 && i < boardSize && j >= 0 && j < boardSize){
-						return false;
-					}
-					return true;
-				}
-				
-				var numberContinous = this.numberContinous;
-				// 只要“米”字线路任一方有一条联通，那么就赢了, 用“短路计算”方式
-				if (a() >= numberContinous || b() >= numberContinous || c() >= numberContinous || d() >= numberContinous) {
-					this.win();
-				}
-				this.isWhite = !this.isWhite;
-			},
-			win: function(){
-				if (!this.isWhite) {
-					alert("黑棋赢了");
-				}
-				else {
-					alert("白棋赢了");
-				}
-				this.isGameOver = true;//设置该局棋盘已经赢了，不可以再走了			
-			},
-			run: function(){ // 主要用于存放事件操作
-				var self = this;
-				
-				// 点击事件
-				self.canvas.onmousedown = function(event){
-					self.play(event);
-				}
-			}
-		}
-		Game.initialize();
-	}
-	
-	window.onload = function(){// 页面初始化完成后，开始执行游戏逻辑
-		init();
-	}
-</script>
-</body>
+<div style="position: absolute; top: 0px; right: 20px">
+    <button onClick="undo()">悔棋</button>
+    <button onclick="redo()">撤銷悔棋</button>
+</div>
+
+
+</div>
+  
+
+  <script>
+    var flag = true;//白子  
+    var tmp,tmpColor;
+    document.querySelectorAll('td').forEach((d, idx) => {
+      d.setAttribute('id', idx);
+      d.addEventListener('click', (e) => {
+        tmp = e.target.id;
+        if(e.target.getAttribute('class')) {
+            alert('此處已經下過旗子');
+            return
+        }
+        if(flag) {
+          e.target.setAttribute('class', 'blackc');
+          flag = false;
+          checkBingo(parseInt(e.target.id), 'blackc')
+        } else {
+          e.target.setAttribute('class', 'whitec');
+          flag = true;
+          checkBingo(parseInt(e.target.id), 'whitec')
+        }
+        
+      })
+    })
+
+function undo() {
+  tmpColor = document.getElementById(tmp).getAttribute('class');
+  document.getElementById(tmp).setAttribute('class', '');
+  flag = !flag;
+}
+
+function redo() {
+  document.getElementById(tmp).setAttribute('class', tmpColor);
+  flag = !flag;
+}
+
+
+function checkBingo(targetID, color) {
+      
+if(document.getElementById(targetID - 11).getAttribute('class')  === color) {
+  if(document.getElementById(targetID - 22).getAttribute('class') === color) {
+    if(document.getElementById(targetID - 33).getAttribute('class') === color) {
+      if(document.getElementById(targetID - 44).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID - 10).getAttribute('class') === color) {
+  if(document.getElementById(targetID - 20).getAttribute('class') === color) {
+    if(document.getElementById(targetID - 30).getAttribute('class') === color) {
+      if(document.getElementById(targetID - 40).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID - 9).getAttribute('class') === color) {
+  if(document.getElementById(targetID - 18).getAttribute('class') === color) {
+    if(document.getElementById(targetID - 27).getAttribute('class') === color) {
+      if(document.getElementById(targetID - 36).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID - 1).getAttribute('class') === color) {
+  if(document.getElementById(targetID - 2).getAttribute('class') === color) {
+    if(document.getElementById(targetID - 3).getAttribute('class') === color) {
+      if(document.getElementById(targetID - 4).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID + 1).getAttribute('class') === color) {
+  if(document.getElementById(targetID + 2).getAttribute('class') === color) {
+    if(document.getElementById(targetID + 3).getAttribute('class') === color) {
+      if(document.getElementById(targetID + 4).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+
+
+if(document.getElementById(targetID + 11).getAttribute('class') === color) {
+  if(document.getElementById(targetID + 22).getAttribute('class') === color) {
+    if(document.getElementById(targetID + 33).getAttribute('class') === color) {
+      if(document.getElementById(targetID + 44).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID + 10).getAttribute('class') === color) {
+  if(document.getElementById(targetID + 20).getAttribute('class') === color) {
+    if(document.getElementById(targetID + 30).getAttribute('class') === color) {
+      if(document.getElementById(targetID + 40).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+if(document.getElementById(targetID + 9).getAttribute('class') === color) {
+  if(document.getElementById(targetID + 18).getAttribute('class') === color) {
+    if(document.getElementById(targetID + 27).getAttribute('class') === color) {
+      if(document.getElementById(targetID + 36).getAttribute('class') === color) {
+        if(color === 'whitec'){
+          alert('白色勝利')
+        } else {
+          alert('黑色勝利')  
+        }
+      }
+    }
+  }
+}
+
+    }
+  </script>
 </html>
