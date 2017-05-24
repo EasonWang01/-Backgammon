@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>五子棋</title>
     <style type="text/css">
+				
         body {
             margin: 10px;
         }
@@ -20,13 +21,12 @@
 </div>
 
  <script type="text/javascript">
-	
 	var canvas = document.getElementById("canvas");
 	var context = document.getElementById("canvas").getContext("2d");
 	var tmp = [];
 	var chessSize = 40;
-	var cellWidth = 500 / (15 - 1 + 2);
-	var boardWidth = 500;	
+	var cellWidth = 640 / (15 - 1 + 2);
+	var boardWidth = 640;	
 	var boardSize = 15;	
 	var chessData;
 	var tmpCheseX;
