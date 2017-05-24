@@ -1,0 +1,223 @@
+<!DOCTYPE>
+
+<html>
+  <head>
+    <style>
+      .chessBoard {
+        background-image: url("./chessBoard.png");
+        background-size: contain;
+        width: 550px;
+        height: 530px;
+      }
+      .block {
+        width: 33px;
+        height: 33px;
+      }
+      .block:hover {
+        background: gray;
+        opacity:  0.4;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div  class="chessBoard">
+      <div id="chessBoard" style="display: flex; flex-wrap: wrap; margin-left: 22px; padding-top: 6px; width: 498px">
+      </div>      
+    </div>
+
+    <div style="position: absolute; top: 0px; right: 20px">
+        <button onClick="undo()">悔棋</button>
+        <button onclick="redo()">撤銷悔棋</button>
+    </div>
+
+    <script>
+      var flag = true;
+      var tmp,tmpColor;
+
+      var chessBoard = document.getElementById('chessBoard');
+
+      for(i = 0; i < 225 ; i++) {
+        var node = document.createElement("div");
+        node.setAttribute('class', 'block');
+        node.setAttribute('id', i);
+        chessBoard.appendChild(node);
+      }
+      
+      document.querySelectorAll('.block').forEach(d => {
+        d.addEventListener('click', (e) => {
+          tmp = e.target.id;
+          var node = document.createElement("img");
+          if(e.target.getAttribute('src')) {
+              alert('此處已經下過旗子');
+              return
+          }
+          if(flag) {
+            node.setAttribute('src', './whitec.png');  
+            checkBingo(parseInt(e.target.id), './whitec.png');
+            flag = !flag;
+          } else {
+            node.setAttribute('src', './blackc.png');
+            checkBingo(parseInt(e.target.id), './blackc.png');
+            flag = !flag;
+          }          
+          e.target.appendChild(node);
+        })
+      });
+         
+
+      function checkBingo(targetID, color) {
+
+           //console.log(targetID)   
+
+          if(document.getElementById(targetID - 16).children.length > 0 && document.getElementById(targetID - 32).children.length > 0 && document.getElementById(targetID - 48).children.length > 0 && document.getElementById(targetID - 64).children.length > 0 ) {
+            if(document.getElementById(targetID - 16).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID - 32).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID - 48).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID - 64).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+
+          if(document.getElementById(targetID - 15).children.length > 0 && document.getElementById(targetID - 30).children.length > 0 && document.getElementById(targetID - 45).children.length > 0 && document.getElementById(targetID - 60).children.length > 0 ) {
+            if(document.getElementById(targetID - 15).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID - 30).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID - 45).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID - 60).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+
+          if(document.getElementById(targetID - 14).children.length > 0 && document.getElementById(targetID - 28).children.length > 0 && document.getElementById(targetID - 42).children.length > 0 && document.getElementById(targetID - 56).children.length > 0 ) {
+            if(document.getElementById(targetID - 14).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID - 28).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID - 42).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID - 56).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+         if(document.getElementById(targetID - 1).children.length > 0 && document.getElementById(targetID - 2).children.length > 0 && document.getElementById(targetID - 3).children.length > 0 && document.getElementById(targetID - 4).children.length > 0 ) {
+            if(document.getElementById(targetID - 1).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID - 2).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID - 3).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID - 4).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+          if(document.getElementById(targetID + 1).children.length > 0 && document.getElementById(targetID + 2).children.length > 0 && document.getElementById(targetID + 3).children.length > 0 && document.getElementById(targetID + 4).children.length > 0 ) {
+            if(document.getElementById(targetID + 1).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID + 2).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID + 3).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID + 4).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+
+          if(document.getElementById(targetID + 16).children.length > 0 && document.getElementById(targetID + 32).children.length > 0 && document.getElementById(targetID + 48).children.length > 0 && document.getElementById(targetID + 64).children.length > 0 ) {
+            if(document.getElementById(targetID + 16).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID + 32).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID + 48).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID + 64).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+
+          if(document.getElementById(targetID + 15).children.length > 0 && document.getElementById(targetID + 30).children.length > 0 && document.getElementById(targetID + 45).children.length > 0 && document.getElementById(targetID + 60).children.length > 0 ) {
+            if(document.getElementById(targetID + 15).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID + 30).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID + 45).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID + 60).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+
+          if(document.getElementById(targetID + 14).children.length > 0 && document.getElementById(targetID + 28).children.length > 0 && document.getElementById(targetID + 42).children.length > 0 && document.getElementById(targetID + 56).children.length > 0 ) {
+            if(document.getElementById(targetID + 14).children[0].getAttribute('src')  === color) {
+              if(document.getElementById(targetID + 28).children[0].getAttribute('src') === color) {
+                if(document.getElementById(targetID + 42).children[0].getAttribute('src') === color) {
+                  if(document.getElementById(targetID + 56).children[0].getAttribute('src') === color) {
+                    if(color === './whitec.png'){
+                      alert('白色勝利');
+                    } else {
+                      alert('黑色勝利');  
+                    }
+                  }
+                }
+              }
+            }
+          } 
+
+          
+      }
+
+
+    function undo() {
+      tmpColor = document.getElementById(tmp).innerHTML;
+      document.getElementById(tmp).innerHTML = "";
+      flag = !flag;
+    }
+    function redo() {
+      document.getElementById(tmp).innerHTML = tmpColor;
+      flag = !flag;
+    }
+
+    </script>
+  </body>
+  
+</html>
